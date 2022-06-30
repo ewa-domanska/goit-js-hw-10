@@ -6,15 +6,13 @@ let countryInput = document.querySelector("#search-box");
 let list = document.querySelector(".country-list");
 let info = document.querySelector(".country-info");
 
-function createListOfCountries(response) {
-  let templates = "";
-  for (const index in response) {
-    let country = response[index]
-    let countryTemplate = `<li><img src="${country.flag}"> ${country.name}</li>`;
-    templates += countryTemplate;
-  }
-  list.innerHTML = templates;
-}
+countryInput.addEventListener("input", (e) => {
+  debounceFetchCountries();
+});
+
+let debounceFetchCountries = Debounce(() => {
+  fetchCountries(countryInput.value.trim())
+}, DEBOUNCE_DELAY);
 
 function fetchCountries(name) {
   if (name.length > 0) {
@@ -27,22 +25,30 @@ function fetchCountries(name) {
         } else if (response.length >= 2 && response.length <= 10) {
           createListOfCountries(response);
         } else if (response.length > 10) {
-          list.innerHTML = "";
+          cleanList()
           Notiflix.Notify.info("Too many matches found. Please enter a more specific name.")
         }
       } else {
+        cleanList();
         Notiflix.Notify.failure("Oops, there is no country with that name");
       }
     })
+  } else {
+    cleanList()
   }
+
 }
 
-let debounceFetchCountries = Debounce(() => {
-    fetchCountries(countryInput.value.trim())
+function createListOfCountries(response) {
+  let templates = "";
+  for (const index in response) {
+    let country = response[index]
+    let countryTemplate = `<li><img src="${country.flag}"> ${country.name}</li>`;
+    templates += countryTemplate;
   }
-  , DEBOUNCE_DELAY);
+  list.innerHTML = templates;
+}
 
-countryInput.addEventListener("input", (e) => {
-    debounceFetchCountries();
-  }
-);
+function cleanList() {
+  list.innerHTML = "";
+}

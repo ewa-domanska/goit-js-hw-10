@@ -10,13 +10,20 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+
+  background-image: radial-gradient(black 1px, transparent 0);
+  background-size: 40px 40px;
+  background-position: -19px -19px;
 }
 
 #search-box {
   font: inherit;
   padding: 8px;
-  max-width: 320px;
+  width: 380px;
+
+  margin-top: 20px;
   margin-bottom: 16px;
+  margin-left: 35px;
 }
 
 .country-list {
