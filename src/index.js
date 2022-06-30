@@ -1,5 +1,6 @@
 import Debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
+import * as FetchCountries from './fetchCountries'
 
 const DEBOUNCE_DELAY = 300;
 let countryInput = document.querySelector("#search-box");
@@ -11,16 +12,14 @@ countryInput.addEventListener("input", (e) => {
 });
 
 let debounceFetchCountries = Debounce(() => {
-  fetchCountries(countryInput.value.trim())
+  handleCountries(countryInput.value.trim())
 }, DEBOUNCE_DELAY);
 
-function fetchCountries(name) {
+function handleCountries(name) {
   if (name.length > 0) {
     cleanList();
     cleanInfo();
-    fetch("https://restcountries.com/v2/name/" + name + "?fields=name,capital,languages,population,flag").then(function (response) {
-      return response.json();
-    }).then((countries) => {
+    FetchCountries.fetchCountries(name).then((countries) => {
       if (countries.length) {
         if (countries.length === 1) {
           createCountryInfo(countries[0])
