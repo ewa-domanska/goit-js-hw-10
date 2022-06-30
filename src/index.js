@@ -18,7 +18,7 @@ function fetchCountries(name) {
   if (name.length > 0) {
     cleanList();
     cleanInfo();
-    fetch("https://restcountries.com/v2/name/" + name).then(function (response) {
+    fetch("https://restcountries.com/v2/name/" + name + "?fields=name,capital,languages,population,flag").then(function (response) {
       return response.json();
     }).then((countries) => {
       if (countries.length) {
